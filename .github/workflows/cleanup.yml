@@ -9,7 +9,7 @@ jobs:
     steps:
       - name: Delete releases older than 14 days
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.RELEASE_TOKEN }}
         run: |
           REPO="AnyaKernel/Kernel-Release"
           CUTOFF=$(date -d "14 days ago" --utc +%Y-%m-%dT%H:%M:%SZ)
@@ -18,8 +18,8 @@ jobs:
             --repo "$REPO" \
             --limit 200 \
             --json tagName,createdAt \
-            --jq --arg cutoff "$CUTOFF" \
-            '[.[] | select(.createdAt < $cutoff)] | .[].tagName')
+            | jq -r --arg cutoff "$CUTOFF" \
+            '.[] | select(.createdAt < $cutoff) | .tagName')
 
           if [[ -z "$STALE" ]]; then
             echo "Tidak ada release yang perlu dihapus."
