@@ -7,7 +7,7 @@ jobs:
   cleanup:
     runs-on: ubuntu-latest
     steps:
-      - name: Delete releases older than 14 days
+      - name: Delete releases older than 7 days
         env:
           GH_TOKEN: ${{ secrets.RELEASE_TOKEN }}
         run: |
